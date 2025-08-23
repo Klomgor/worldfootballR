@@ -151,12 +151,10 @@ tm_each_team_player_market_val <- function(each_team_url, time_pause = 15) {
     dplyr::mutate(player_market_value_euro = mapply(.convert_value_to_numeric, player_market_value)) %>%
     dplyr::mutate(date_joined = .tm_fix_dates(.data[["date_joined"]]),
                   contract_expiry = .tm_fix_dates(.data[["contract_expiry"]])) %>%
-    tidyr::separate(., player_birthday, into = c("Month", "Day", "Year"), sep = " ", remove = F) %>% suppressWarnings() |> 
+    tidyr::separate(., player_birthday, into = c("Month", "Day", "Year"), sep = "\\.", remove = F) %>% suppressWarnings() |> 
     dplyr::mutate(player_age = gsub(".*\\(", "", .data[["player_birthday"]]) %>% gsub("\\)", "", .),
-                  Day = gsub(",", "", .data[["Day"]]) %>% as.numeric(),
-                  Year = as.numeric(gsub("\\(.*", "", .data[["Year"]])),
-                  Month = match(.data[["Month"]], month.abb),
-                  player_dob = suppressWarnings(lubridate::ymd(paste(.data[["Year"]], .data[["Month"]], .data[["Day"]], sep = "-")))) %>%
+                  player_birthday = gsub("\\s*\\([^)]*\\)", "", .data[["player_birthday"]]),
+                  player_dob = suppressWarnings(lubridate::dmy(.data[["player_birthday"]]))) %>%
     dplyr::mutate(player_age = as.numeric(gsub("\\D", "", .data[["player_age"]]))) %>%
     dplyr::select(.data[["comp_name"]], .data[["country"]], .data[["season_start_year"]], .data[["squad"]], .data[["player_num"]], .data[["player_name"]], .data[["player_position"]], .data[["player_dob"]], .data[["player_age"]], .data[["player_nationality"]], .data[["current_club"]],
                   .data[["player_height_mtrs"]], .data[["player_foot"]], .data[["date_joined"]], .data[["joined_from"]], .data[["contract_expiry"]], .data[["player_market_value_euro"]], .data[["player_url"]])
@@ -397,10 +395,8 @@ tm_player_market_values <- function(country_name, start_year, league_url = NA) {
                   contract_expiry = .tm_fix_dates(.data[["contract_expiry"]])) %>%
     tidyr::separate(., player_birthday, into = c("Month", "Day", "Year"), sep = " ", remove = F) %>%
     dplyr::mutate(player_age = gsub(".*\\(", "", .data[["player_birthday"]]) %>% gsub("\\)", "", .),
-                  Day = gsub(",", "", .data[["Day"]]) %>% as.numeric(),
-                  Year = as.numeric(gsub("\\(.*", "", .data[["Year"]])),
-                  Month = match(.data[["Month"]], month.abb),
-                  player_dob = suppressWarnings(lubridate::ymd(paste(.data[["Year"]], .data[["Month"]], .data[["Day"]], sep = "-")))) %>%
+                  player_birthday = gsub("\\s*\\([^)]*\\)", "", .data[["player_birthday"]]),
+                  player_dob = suppressWarnings(lubridate::dmy(.data[["player_birthday"]]))) %>%
     dplyr::mutate(player_age = as.numeric(gsub("\\D", "", .data[["player_age"]]))) %>%
     dplyr::select(.data[["comp_name"]], .data[["region"]], .data[["country"]], .data[["season_start_year"]], .data[["squad"]], .data[["player_num"]], .data[["player_name"]], .data[["player_position"]], .data[["player_dob"]], .data[["player_age"]], .data[["player_nationality"]], .data[["current_club"]],
                   .data[["player_height_mtrs"]], .data[["player_foot"]], .data[["date_joined"]], .data[["joined_from"]], .data[["contract_expiry"]], .data[["player_market_value_euro"]], .data[["player_url"]])

@@ -1,5 +1,15 @@
 # worldfootballR (development version)
 
+### Improvements
+
+* Internal function `.tm_fix_dates` Now handles parsing even more date formats, including "30.08.2029" and "2029.08.30"  (0.6.8.0001) ([#445](https://github.com/JaseZiv/worldfootballR/issues/445))
+* Address issues with dates for `player_dob` in the output of `tm_player_market_values()` and `tm_each_team_player_market_val()` (0.6.8.0001)
+
+
+***
+
+# worldfootballR 0.6.8
+
 ### New Functions
 
 * `tm_each_team_player_market_val()` created to allow users to get player market values per team [#432](https://github.com/JaseZiv/worldfootballR/issues/432)
