@@ -357,24 +357,43 @@
 #' @noRd
 #'
 .tm_fix_dates <- function(dirty_dates) {
-
+  
   fix_date <- function(dirty_date) {
     if(is.na(dirty_date)) {
       clean_date <- NA_character_
+    } else if (grepl("\\.", dirty_date)) {
+      
+      first_part <- sub("\\..*", "", dirty_date)
+      
+      # Count digits
+      n <- nchar(first_part)
+      
+      if (n == 4) {
+        # Do something if 4 digits
+        tryCatch({clean_date <- lubridate::ymd(dirty_date) %>% as.character()}, error = function(e) {clean_date <- NA_character_})
+      } else if (n == 2) {
+        # Do something else if 2 digits
+        tryCatch({clean_date <- lubridate::dmy(dirty_date) %>% as.character()}, error = function(e) {clean_date <- NA_character_})
+      } else {
+        # Fallback
+        clean_date <- NA_character_
+      }
+      
+      
     } else {
       split_string <- strsplit(dirty_date, split = " ") %>% unlist() %>% gsub(",", "", .)
       if(length(split_string) != 3) {
         clean_date <- NA_character_
       } else {
         tryCatch({clean_date <- lubridate::ymd(paste(split_string[3], split_string[1], split_string[2], sep = "-")) %>%
-          as.character()}, error = function(e) {country_name <- NA_character_})
+          as.character()}, error = function(e) {clean_date <- NA_character_})
       }
     }
-
+    
     return(clean_date)
   }
   clean_dates <- dirty_dates %>% purrr::map_chr(fix_date)
-
+  
   return(clean_dates)
 }
 
