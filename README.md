@@ -1,6 +1,17 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# Archived
+
+This data repo and the associated [`worldfootballR`](https://github.com/JaseZiv/worldfootballR) package will no longer be maintained. 
+
+Thanks to you all for all you continued support over the years of maintaining it. It was a pleasure.
+
+
+***
+
+
+
 # worldfootballR <img src="man/figures/logo.png" align="right" width="181" height="201"/>
 
 <!-- badges: start -->
